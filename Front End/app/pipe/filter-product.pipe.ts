@@ -6,11 +6,15 @@ import { Product } from '../models/Product';
 })
 export class FilterProductPipe implements PipeTransform {
 
-  transform(products:Product[], SearchTerm:String): Product[] {
-    if(!products || !SearchTerm)
-    {
-      return products;
-    }
-    return products.filter(product=>product.productName.toLocaleLowerCase().match(SearchTerm.toLocaleLowerCase()));
+ transform(value: any, args?: any): any {
+
+    if(!value)return null;
+    if(!args)return value;
+
+    args = args.toLowerCase();
+
+    return value.filter(function(item){
+        return JSON.stringify(item).toLowerCase().includes(args);
+    });
   }
 }

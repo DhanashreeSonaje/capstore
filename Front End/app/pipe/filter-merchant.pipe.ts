@@ -5,13 +5,15 @@ import { MerchantDetails } from '../models/MerchantDetails';
   name: 'filterMerchant'
 })
 export class FilterMerchantPipe implements PipeTransform {
+transform(value: any, args?: any): any {
 
-  transform(merchants:MerchantDetails[], SearchTerm:String): MerchantDetails[] {
-    if(!merchants || !SearchTerm)
-    {
-      return merchants;
-    }
-    return merchants.filter(merchant=>merchant.name.toLocaleLowerCase().match(SearchTerm.toLocaleLowerCase()));
+    if(!value)return null;
+    if(!args)return value;
+
+    args = args.toLowerCase();
+
+    return value.filter(function(item){
+        return JSON.stringify(item).toLowerCase().includes(args);
+    });
   }
-
 }
