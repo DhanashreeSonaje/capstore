@@ -1,21 +1,47 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonFeedback} from 'src/app/model/CommonFeedBack';
 import { Router } from '@angular/router';
-import { CommonFeedback } from 'src/app/models/CommonFeedback';
+import { CapstoreService } from 'src/app/service/capstore.service';
+
 
 @Component({
-  selector: 'app-common-feedback',
-  templateUrl: './common-feedback.component.html',
-  styleUrls: ['./common-feedback.component.css']
+  selector: 'app-cfd',
+  templateUrl: './common-feedback.component.html'
 })
 export class CommonFeedbackComponent implements OnInit {
 
-  feedbacks:CommonFeedback[];
-  constructor(private router:Router) { }
+  cfdList: CommonFeedback[];
+  searchTerm;
 
-  ngOnInit() {
+
+  constructor(private router:Router,
+    private adminService: CapstoreService) { }
+
+    approveRequest(feedbackId){
+      this.adminService.forwardRequestToMerchant(feedbackId).subscribe();
   }
-  back()
-  {
-      this.router.navigate(['admin']);
+
+    approveResponse(feedbackId){
+      console.log("approved")
+      this.adminService.forwardResponseToCustomer(feedbackId).subscribe()
   }
+
+  ngOnInit(){
+    this.adminService.getAllCommonFeedback().subscribe(
+        data=>{
+            this.cfdList=data;
+        },
+        error=>{
+            console.log(error);
+        }
+    )
+  }
+
+
+ back()
+{
+    this.router.navigate(['admin']);
+}
+
+
 }
